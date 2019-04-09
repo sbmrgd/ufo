@@ -40,6 +40,8 @@ explosion_sf3 = pygame.surface.Surface(16,16,assets.explosionPixels3)
 explosion_sf4 = pygame.surface.Surface(16,16,assets.explosionPixels4)
 rock_sf = pygame.surface.Surface(16,16,assets.rockPixels)
 rect1_sf= pygame.surface.Surface(2,1,assets.rect1Pixels)
+moon = pygame.surface.Surface(26, 39, assets.moonPixels)
+nebula = pygame.surface.Surface(48, 48, assets.nebula4Pixels)
 vx=0
 vy=0
 xufo =40
@@ -50,6 +52,8 @@ ufoType = 1 #1: Large 2:Medium 3: Small
 ufoRect = pygame.Rect(xufo+4,yufo+7,10-4,14-7)
 xrock = 55-8
 yrock = 44-8
+xnebula = 10
+ynebula = 200
 counter = 0;
 #laser = 0;
 laserleft = 1;
@@ -162,6 +166,15 @@ def pollButtons():
 def drawStars():
     for i in range(1,20):
         screen.blit(rect1_sf, xcoordint[i-1], ycoordint[i-1])
+    return
+
+def drawNebula():
+    global xnebula
+    global ynebula
+    xnebula = (xnebula - vx)%220 
+    ynebula = (ynebula - vy)%176 
+    screen.blit(nebula,xnebula - 110,ynebula - 88)
+    screen.blit(moon,(xnebula -110)%220 - 110,(ynebula - 88)%176 - 88)
     return
 
 #Initialize the UFO: type + position + velocity
@@ -339,6 +352,7 @@ while True:
         screen.blit(timeIndicator_sf,40,1)
         umachine.draw_text(55-1*5,2,str(remainingTime),15)
         pollButtons()
+        drawNebula()
         updateStarsPosition()
         drawStars()
         drawUFO()

@@ -41,7 +41,7 @@ explosion_sf4 = pygame.surface.Surface(16,16,assets.explosionPixels4)
 rock_sf = pygame.surface.Surface(16,16,assets.rockPixels)
 rect1_sf= pygame.surface.Surface(2,1,assets.rect1Pixels)
 moon = pygame.surface.Surface(26, 39, assets.moonPixels)
-nebula = pygame.surface.Surface(48, 48, assets.nebula4Pixels)
+nebula = pygame.surface.Surface(64, 64, assets.nebulaPixels)
 vx=0
 vy=0
 xufo =40
@@ -80,11 +80,7 @@ def titleScreen():
         if eventtype != pygame.NOEVENT and eventtype.type == pygame.KEYDOWN and eventtype.key == pygame.BUT_C:
             return
         screen.blit( back_sf, 0, 0 ) 
-        umachine.draw_text(55-3*5-1,40,"U.F.O.",5)
-        umachine.draw_text(55-3*5+1,40,"U.F.O.",5)
-        umachine.draw_text(55-3*5,40-1,"U.F.O.",5)
-        umachine.draw_text(55-3*5,40+1,"U.F.O.",5)
-        umachine.draw_text(55-3*5,40,"U.F.O.",15)
+        drawText( 55 - 3*5, 40, "U.F.O.", 15, 5)
         if visible>8:
             umachine.draw_text(55-3*5,78,"Press C", 15)
         if visible == 16:
@@ -160,6 +156,15 @@ def pollButtons():
                 vy = 0
             if eventtype.key == pygame.K_DOWN:
                 vy = 0
+    return
+
+#Draw text with background and foreground colors
+def drawText(xpos, ypos, textstring, foregroundcolor, backgroundcolor):
+    umachine.draw_text( xpos - 1, ypos, textstring, backgroundcolor)
+    umachine.draw_text( xpos + 1, ypos, textstring, backgroundcolor)
+    umachine.draw_text( xpos, ypos - 1, textstring, backgroundcolor)
+    umachine.draw_text( xpos, ypos + 1, textstring, backgroundcolor)
+    umachine.draw_text( xpos, ypos, textstring, foregroundcolor)
     return
 
 #Draw the stars
@@ -318,16 +323,8 @@ def drawRobot():
     
     counter = counter + 1
     scorestr = (5-len(str(score)))*"0"+str(score)
-    umachine.draw_text(55-2*5-1,10,scorestr,5)
-    umachine.draw_text(55-2*5+1,10,scorestr,5)
-    umachine.draw_text(55-2*5,9,scorestr,5)
-    umachine.draw_text(55-2*5,11,scorestr,5)
-    umachine.draw_text(55-2*5,10,scorestr,15)
-    umachine.draw_text(55-4*5-1,54,"Game Over",5)
-    umachine.draw_text(55-4*5+1,54,"Game Over",5)
-    umachine.draw_text(55-4*5,53,"Game Over",5)
-    umachine.draw_text(55-4*5,55,"Game Over",5)
-    umachine.draw_text(55-4*5,54,"Game Over",15)
+    drawText(55 -2*5, 10, scorestr, 15, 5)
+    drawText(55 -4*5, 54, "Game Over", 15, 5)
     eventtype = pygame.event.poll()
     if eventtype != pygame.NOEVENT and eventtype.type == pygame.KEYDOWN and eventtype.key == pygame.BUT_C:
         gameState = 0
@@ -351,7 +348,6 @@ while True:
             gameState = 2
         screen.blit(timeIndicator_sf,40,1)
         umachine.draw_text(55-1*5,2,str(remainingTime),15)
-        pollButtons()
         drawNebula()
         updateStarsPosition()
         drawStars()
@@ -361,6 +357,7 @@ while True:
         else:
             updateUFOPosition()
             
+        pollButtons()
         drawPlayerShip()
         screen.fill(14,gunRect)
     elif gameState == 2: #Game Over

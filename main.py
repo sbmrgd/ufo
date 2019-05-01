@@ -11,6 +11,9 @@ pygame.display.set_palette_16bit([
     58225, 13598, 60486, 40179, 42596, 46845, 63245, 65535
 ]);
 
+# Initialize sound
+g_sound = pygame.mixer.Sound()
+g_sound.play_from_sd("ufointro.snd")
 
 
 screen = pygame.display.set_mode() # full screen
@@ -73,7 +76,7 @@ currentUFOscore = 0
 #Function to draw title screen (+initialize random generator)
 def titleScreen():
     visible = 0
-    
+    #g_sound.play_from_sd("ufointro.snd")
     while True:
         urandom.getrandbits(30)
         eventtype = pygame.event.poll()
@@ -140,6 +143,7 @@ def pollButtons():
                 #laser = 1
                 #if cockpitState == 2:
                     drawLaser()
+                    g_sound.play_sfx(assets.laserSound, len(assets.laserSound), True)
                     if checkCollision() == True:
                         if explosionState ==0:
                             explosionState = 30
